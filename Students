@@ -27,10 +27,7 @@ class Student
   end
 
   def add_student
-    if self.class.students.any? 
-      { |student| student.name == @name 
-    && student.surname == @surname 
-    && student.birth_date == @birth_date }
+    if self.class.students.any? { |student| student.name == @name  && student.surname == @surname  && student.birth_date == @birth_date }
       puts "This student has already been added."
     else
       self.class.students << self
