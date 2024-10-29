@@ -1,0 +1,104 @@
+require 'date'
+
+class Student
+  @students = []
+  attr_accessor :surname, :name
+  attr_reader :birth_date
+  
+  def initialize(name, surname, birth_date)
+    @name = name
+    @surname = surname
+    @birth_date = birth_date
+
+    if @birth_date > Date.today
+      raise ArgumentError, "birth_date must be in the past"
+    end    
+
+    add_student
+  end
+
+  def self.students 
+    @students 
+  end
+
+  def calculate_age
+    age = Date.today.year - @birth_date.year
+    age
+  end
+
+  def add_student
+    if self.class.students.any? 
+      { |student| student.name == @name 
+    && student.surname == @surname 
+    && student.birth_date == @birth_date }
+      puts "This student has already been added."
+    else
+      self.class.students << self
+      puts "#{@name} #{@surname} has been added to list."
+    end 
+  end
+
+  def remove_student
+    puts "\n#{self.name}, #{self.surname} , #{self.birth_date} has been deleted"
+      self.class.students.delete(self)
+  end 
+
+  def self.get_students_by_age(age)
+    selected_students = @students.select { |student| student.calculate_age == age }
+    selected_students.each do |student|
+      puts "#{student.name} #{student.surname}, Birth Date: #{student.birth_date}"
+    end
+  end
+
+  def self.get_students_by_name(name)
+    selected_students = @students.select { |student| student.name == name }
+    selected_students.each do |student|
+      puts "#{student.name} #{student.surname}, Birth Date: #{student.birth_date}"
+    end
+  end
+
+end
+
+class Program
+
+  def initialize 
+    main
+  end
+
+  def main
+    begin
+      student1 = Student.new("Anton", "Atntot2", Date.new(2004, 10, 29))
+      student2 = Student.new("444", "445", Date.new(2002, 3, 19))
+      student3 = Student.new("445", "447", Date.new(1999, 5, 4))
+      student4 = Student.new("444", "445", Date.new(2002, 3, 19))
+      student5 = Student.new("444", "445", Date.new(2021, 6, 11))
+
+      puts "\nStudents aged 25:"
+      Student.get_students_by_age(25)
+
+      puts "\nStudents named 444:"
+      Student.get_students_by_name("444")
+
+      puts "\nAll students:"
+      Student.students.each do |item|
+        print_students(item)
+      end
+
+      student2.remove_student
+
+      puts "\nAll students:"
+      Student.students.each do |item|
+        print_students(item)
+      end
+    rescue ArgumentError => e
+      puts e.message
+    end
+  end
+
+  def print_students(item)
+    puts "- student name: #{item.name}, student surname: #{item.surname}, student Birth Date: #{item.birth_date}"
+  end 
+
+end
+
+program = Program.new
