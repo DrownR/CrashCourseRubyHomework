@@ -1,0 +1,79 @@
+require 'minitest/autorun'
+require 'minitest/reporters'
+require_relative '../test/student'
+require "../test/CustomErrors"
+
+Minitest::Reporters.use! [
+  Minitest::Reporters::SpecReporter.new,
+  Minitest::Reporters::JUnitReporter.new,
+  Minitest::Reporters::HtmlReporter.new(
+    reports_dir: 'spec_test/reports',
+    reports_filname: 'test_results.html',
+    clean:false,
+    add_timestamp: true
+  )
+]
+
+describe Student do
+
+  before do
+    Student.class_variable_set(:@@students, [])
+  end
+
+  describe 'initialization' do
+    it 'creates a student with valid details' do
+      student = Student.new("Anton", "Atntot2", Date.new(2006, 3, 5))
+      _(student.name).must_equal "Anton"
+      _(student.surname).must_equal "Atntot2"
+      _(student.birth_date).must_equal Date.new(2006, 3, 5)
+    end
+
+    it 'raises an error for future birth dates' do
+      _(proc { Student.new("John", "Doe", Date.today + 1) }).must_raise ArgumentError
+    end
+  end
+
+  describe 'age calculation' do
+    it 'calculates age correctly' do
+      student = Student.new("444", "545", Date.new(2000, 1, 1))
+      _(student.calculate_age).must_equal Date.today.year - 2000
+    end
+  end
+
+  describe 'check element in array' do
+    it 'students have student element' do
+      student5 = Student.new("447", "545", Date.new(2021, 6, 11))
+      _(Student.students).must_include student5
+    end
+  end
+
+  describe 'check duplicate in array' do    
+    it 'students have duplicate student element' do
+      student1 = Student.new("443", "544", Date.new(2015, 2, 6))
+      
+      _(proc { Student.new("443", "544", Date.new(2015, 2, 6)) }).must_raise ElementInArrayExistsError
+    end
+  end
+
+  describe 'get students by value' do    
+
+    before do
+      student1 = Student.new("Anton", "Atntot2", Date.new(2006, 3, 5))
+      student2 = Student.new("444", "545", Date.new(2002, 3, 19))
+      student3 = Student.new("445", "547", Date.new(1999, 5, 4))
+      student4 = Student.new("446", "545", Date.new(2002, 3, 19))
+      student5 = Student.new("447", "545", Date.new(2021, 6, 11))
+      student6 = Student.new("448", "545", Date.new(2003, 11, 1))
+    end
+    
+    it 'students have student with selected age' do              
+      students_with_age_20 = Student.get_students_by_age(22)
+      _(students_with_age_20.size).must_equal 2
+    end 
+
+    it 'students have student with selected name' do        
+      students_with_name_448 = Student.get_students_by_name("446")
+      _(students_with_name_448.size).must_equal 1
+    end
+  end
+end 
