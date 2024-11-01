@@ -1,0 +1,5 @@
+class ElementInArrayExistsError < StandardError
+  def initialize
+    super("this element is already in the array")
+  end
+end
