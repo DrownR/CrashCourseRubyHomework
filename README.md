@@ -1,1 +1,1 @@
-123
+To check the functionality of the program, you need to use absolutely all attached scripts, and also correctly specify the path to certain scripts. Look at: spec_style_tests.rb on lines 3,4; unit_style_tests.rb on lines 3,4; student.rb line 2
