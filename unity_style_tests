@@ -1,0 +1,75 @@
+require 'minitest/autorun'
+require 'minitest/reporters'
+require_relative '../test/student'
+require "../test/CustomErrors"
+
+Minitest::Reporters.use! [
+  Minitest::Reporters::SpecReporter.new,
+  Minitest::Reporters::JUnitReporter.new,
+  Minitest::Reporters::HtmlReporter.new(
+    reports_dir: 'unit_test/reports',
+    reports_filname: 'test_results.html',
+    clean:false,
+    add_timestamp: true
+  )
+]
+
+class StudentTest < Minitest::Test
+
+  def setup
+    Student.class_variable_set(:@@students, [])  
+  end
+
+  def test_initialize_student
+    student1 = Student.new("Anton", "Atntot2", Date.new(2006, 3, 5))
+    assert_equal "Anton", student1.name
+    assert_equal "Atntot2", student1.surname
+    assert_equal Date.new(2006, 3, 5), student1.birth_date
+  end
+
+  def test_initialize_future_data
+    assert_raises(ArgumentError) { Student.new("444", "545", Date.today+1) }
+  end
+  
+  def test_calculate_age
+    student2 = Student.new("444", "545", Date.new(2002, 3, 19)) 
+    expected_age = 22
+    assert_equal expected_age, student2.calculate_age
+  end 
+
+  def test_add_student
+    student3 = Student.new("445", "547", Date.new(1999, 5, 4))
+    assert_includes Student.students, student3
+  end 
+
+  def test_add_duplicate_student
+    student1 = Student.new("444", "545", Date.new(2002, 3, 19))
+    assert_raises(ElementInArrayExistsError) do
+      Student.new("444", "545", Date.new(2002, 3, 19))
+    end
+  end 
+
+  def test_get_students_by_age
+    student1 = Student.new("Anton", "Atntot2", Date.new(2006, 3, 5))
+    student2 = Student.new("444", "545", Date.new(2002, 3, 19))
+    student3 = Student.new("445", "547", Date.new(1999, 5, 4))
+    student4 = Student.new("446", "545", Date.new(2002, 7, 27))
+    student5 = Student.new("447", "545", Date.new(2021, 6, 11))
+    student6 = Student.new("448", "545", Date.new(2003, 11, 1))
+    
+    students_aged_22 = Student.get_students_by_age(22)
+    assert_equal 2, students_aged_22.size
+  end
+
+  def test_get_students_by_name
+    student1 = Student.new("Anton", "Atntot2", Date.new(2006, 3, 5))
+    student2 = Student.new("444", "545", Date.new(2002, 3, 19))
+    student3 = Student.new("445", "547", Date.new(1999, 5, 4))
+    student4 = Student.new("446", "545", Date.new(2002, 3, 19))
+    student5 = Student.new("447", "545", Date.new(2021, 6, 11))
+    student6 = Student.new("448", "545", Date.new(2003, 11, 1))
+    
+    students_named_Anton = Student.get_students_by_name("Anton")
+    assert_equal 1, students_named_Anton.size
+  end
+end
