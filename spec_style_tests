@@ -35,8 +35,8 @@ describe Student do
 
   describe 'age calculation' do
     it 'calculates age correctly' do
-      student = Student.new("444", "545", Date.new(2000, 1, 1))
-      _(student.calculate_age).must_equal Date.today.year - 2000
+      student = Student.new("444", "545", Date.new(2000, 11, 5))
+      _(student.calculate_age).must_equal 23
     end
   end
 
@@ -61,19 +61,19 @@ describe Student do
       student1 = Student.new("Anton", "Atntot2", Date.new(2006, 3, 5))
       student2 = Student.new("444", "545", Date.new(2002, 3, 19))
       student3 = Student.new("445", "547", Date.new(1999, 5, 4))
-      student4 = Student.new("446", "545", Date.new(2002, 3, 19))
+      student4 = Student.new("446", "545", Date.new(2002, 6, 19))
       student5 = Student.new("447", "545", Date.new(2021, 6, 11))
-      student6 = Student.new("448", "545", Date.new(2003, 11, 1))
+      student6 = Student.new("448", "545", Date.new(2002, 11, 27))
     end
     
     it 'students have student with selected age' do              
-      students_with_age_20 = Student.get_students_by_age(22)
-      _(students_with_age_20.size).must_equal 2
+      students_with_age_22 = Student.get_students_by_age(22)
+      _(students_with_age_22.size).must_equal 2
     end 
 
     it 'students have student with selected name' do        
-      students_with_name_448 = Student.get_students_by_name("446")
-      _(students_with_name_448.size).must_equal 1
+      students_with_name_446 = Student.get_students_by_name("446")
+      _(students_with_name_446.size).must_equal 1
     end
   end
 end 
