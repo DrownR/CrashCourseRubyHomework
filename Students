@@ -28,7 +28,7 @@ class Student
 
   def calculate_age
     had_birthday_this_year = false  
-    if @birth_date.month < Date.today.month ||(@birth_date.month == Date.today.month && @birth_date.day >= Date.today.day)
+    if @birth_date.month < Date.today.month ||(@birth_date.month == Date.today.month && @birth_date.day <= Date.today.day)
       had_birthday_this_year = true
     end 
     years_in_student_age = Date.today.year - @birth_date.year
@@ -38,7 +38,7 @@ class Student
   end
 
   def add_student
-    if self.class.students.none? { |student| student.name == @name && student.surname == @surname && student.birth_date == @birth_date }    
+    if self.class.students.none? { |student| student.name == @name && student.surname == @surname && student.birth_date == @birth_date }     
       self.class.students << self
     else
       raise ElementInArrayExistsError
