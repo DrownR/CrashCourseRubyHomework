@@ -32,8 +32,8 @@ class StudentTest < Minitest::Test
   end
   
   def test_calculate_age
-    student2 = Student.new("444", "545", Date.new(2002, 3, 19)) 
-    expected_age = 22
+    student2 = Student.new("444", "545", Date.new(2002, 11, 2)) 
+    expected_age = 21
     assert_equal expected_age, student2.calculate_age
   end 
 
@@ -55,10 +55,10 @@ class StudentTest < Minitest::Test
     student3 = Student.new("445", "547", Date.new(1999, 5, 4))
     student4 = Student.new("446", "545", Date.new(2002, 7, 27))
     student5 = Student.new("447", "545", Date.new(2021, 6, 11))
-    student6 = Student.new("448", "545", Date.new(2003, 11, 1))
+    student6 = Student.new("448", "545", Date.new(2002, 11, 25))
     
-    students_aged_22 = Student.get_students_by_age(22)
-    assert_equal 2, students_aged_22.size
+    students_aged_21 = Student.get_students_by_age(21)
+    assert_equal 1, students_aged_21.size
   end
 
   def test_get_students_by_name
