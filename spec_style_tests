@@ -4,11 +4,8 @@ require_relative '../test/student'
 require "../test/CustomErrors"
 
 Minitest::Reporters.use! [
-  Minitest::Reporters::SpecReporter.new,
-  Minitest::Reporters::JUnitReporter.new,
   Minitest::Reporters::HtmlReporter.new(
     reports_dir: 'spec_test/reports',
-    reports_filname: 'test_results.html',
     clean:false,
     add_timestamp: true
   )
